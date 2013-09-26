@@ -1,0 +1,10 @@
+LEDstrip	KEYWORD1
+SetRGBColour	KEYWORD2
+SetRandomColour	KEYWORD2
+SetWhiteLight	KEYWORD2
+DefineRGBLED KEYWORD2
+DefineSingleColourLED KEYWORD2
+SetAdvRandomColour KEYWORD2
+SetRedLight	KEYWORD2
+SetGreenLight	KEYWORD2
+SetBlueLight	KEYWORD2
