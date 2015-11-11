@@ -17,12 +17,31 @@
 #include "Arduino.h"
 #include <math.h>
 
+/* Usage:
+	#include <LEDstrip.h>
 
-LEDstrip::LEDstrip() 
-{}
+	LEDstrip myLEDstrip;
 
-void LEDstrip::DefineRGBLED(int Rpin, int Gpin, int Bpin)
-{
+	void setup() {
+		myLEDstrip.DefineRGBLED(5, 3, 6);
+	}
+
+	void loop() {
+
+	}
+*/
+
+LEDstrip::LEDstrip() {
+}
+
+void LEDstrip::DefineRGBLED(int Rpin, int Gpin, int Bpin) {
+	/// <summary>
+	/// Defines which PWM pins are used for the RGB LEDS
+	/// </summary>
+	/// <param name="Rpin">Red pin</param>
+	/// <param name="Gpin">Green pin</param>
+	/// <param name="Bpin">Blue pin</param>
+	
 	isRGB=true;
 	pinMode(Rpin, OUTPUT);
     _Rpin = Rpin;
@@ -34,28 +53,41 @@ void LEDstrip::DefineRGBLED(int Rpin, int Gpin, int Bpin)
     _Bpin = Bpin;
 }
 
-void LEDstrip::DefineSingleColourLED(int LEDpin)
-{
+void LEDstrip::DefineSingleColourLED(int LEDpin) {
+	/// <summary>
+	/// Defines which PWM pin is used for a non RGB LEDstrip
+	/// </summary>
+	/// <param name="LEDpin">PWM pin</param>
+	
 	isRGB=false;
 	pinMode(LEDpin, OUTPUT);
     _Rpin = LEDpin;
 }
 
-void LEDstrip::LEDstripOFF()
-{
-		analogWrite(_Rpin, 0);
-		analogWrite(_Gpin, 0);
-		analogWrite(_Bpin, 0);
+void LEDstrip::LEDstripOFF() {
+	/// <summary>
+	/// Turns the LEDstrip OFF
+	/// </summary>
+	
+	analogWrite(_Rpin, 0);
+	analogWrite(_Gpin, 0);
+	analogWrite(_Bpin, 0);
 
-		// save current RGB values for future use
-		RedVal=0;
-		GreenVal=0;
-		BlueVal=0;
+	// save current RGB values for future use
+	RedVal=0;
+	GreenVal=0;
+	BlueVal=0;
 }
 
 
-void LEDstrip::SetRGBColour(int R, int G, int B)
-{
+void LEDstrip::SetRGBColour(byte R, byte G, byte B) {
+	/// <summary>
+	/// Make the RGB LEDstrip light up in a specific RGB colour.
+	/// </summary>
+	/// <param name="R">The amount of RED (0-255)</param>
+	/// <param name="G">The amount of GREEN (0-255)</param>
+	/// <param name="B">The amount of BLUE (0-255)</param>
+	
 	if (isRGB=true) { 
 		analogWrite(_Rpin, R);
 		analogWrite(_Gpin, G);
@@ -71,8 +103,14 @@ void LEDstrip::SetRGBColour(int R, int G, int B)
 	}
 }
 
-void LEDstrip::SetHSLColour(int H, int S, int L)
-{
+void LEDstrip::SetHSLColour(int H, int S, int L) {
+	/// <summary>
+	/// Make the RGB LEDstrip light up in a specific HSL colour.
+	/// </summary>
+	/// <param name="H">Hue (0-360)</param>
+	/// <param name="S">Saturation (0-100)</param>
+	/// <param name="L">Lightness (0-100)</param>
+
 	if (isRGB=true) {
 		HSL2RGB(H,S,L);
 
@@ -87,8 +125,14 @@ void LEDstrip::SetHSLColour(int H, int S, int L)
 	}
 }
 
-void LEDstrip::SetHSLrandomColour(int StartHueAngle, int maxAngleStep)
-{
+void LEDstrip::SetHSLrandomColour(int StartHueAngle, int maxAngleStep) {
+	/// <summary>
+	/// Generate a random HSL colour which only differs by a given amount from the previous colour. 
+	/// The Saturation is set to 100% and the Lightness to 50%.
+	/// </summary>
+	/// <param name="StartHueAngle">Start hue (0-360)</param>
+	/// <param name="maxAngleStep">Max. hue step to next colour</param>
+
 	int NewH = random(StartHueAngle-maxAngleStep,StartHueAngle+maxAngleStep);
 	// modulo is used to make sure the value is between 0 and 360deg and that for example 371deg results in 375 % 360 = 15deg
 	NewH=NewH % 360;
@@ -96,8 +140,11 @@ void LEDstrip::SetHSLrandomColour(int StartHueAngle, int maxAngleStep)
 	SetHSLColour(NewH,100,50);
 }
 
-void LEDstrip::SetRandomColour(int dwell)
-{
+void LEDstrip::SetRandomColour() {
+	/// <summary>
+	/// Generate a random colour
+	/// </summary>
+	
 	// save current RGB values for future use
 	RedVal=random(255);
 	GreenVal=random(255);
@@ -108,8 +155,12 @@ void LEDstrip::SetRandomColour(int dwell)
 	analogWrite(_Bpin, BlueVal);
 }
 
-void LEDstrip::SetWhiteLight(int intensity)
-{
+void LEDstrip::SetWhiteLight(byte intensity) {
+	/// <summary>
+	/// Generate White light at a given intensity (0-255)
+	/// </summary>
+	/// <param name="intensity">The intensity of the light (0-255)</param>
+	
 	// save current RGB values for future use
 	RedVal=random(intensity);
 	GreenVal=random(intensity);
@@ -120,8 +171,12 @@ void LEDstrip::SetWhiteLight(int intensity)
 	analogWrite(_Bpin, intensity);
 }
 
-void LEDstrip::SetRedLight(int intensity)
-{
+void LEDstrip::SetRedLight(byte intensity) {
+	/// <summary>
+	/// Generate Red light at a given intensity (0-255)
+	/// </summary>
+	/// <param name="intensity">The intensity of the light (0-255)</param>
+
 	analogWrite(_Rpin, intensity);
 	analogWrite(_Gpin, 0);
 	analogWrite(_Bpin, 0);
@@ -133,8 +188,12 @@ void LEDstrip::SetRedLight(int intensity)
 
 }
 
-void LEDstrip::SetGreenLight(int intensity)
-{
+void LEDstrip::SetGreenLight(byte intensity) {
+	/// <summary>
+	/// Generate Green light at a given intensity (0-255)
+	/// </summary>
+	/// <param name="intensity">The intensity of the light (0-255)</param>
+
 	analogWrite(_Rpin, 0);
 	analogWrite(_Gpin, intensity);
 	analogWrite(_Bpin, 0);
@@ -145,8 +204,12 @@ void LEDstrip::SetGreenLight(int intensity)
 	BlueVal=random(0);
 }
 
-void LEDstrip::SetBlueLight(int intensity)
-{
+void LEDstrip::SetBlueLight(byte intensity) {
+	/// <summary>
+	/// Generate Blue light at a given intensity (0-255)
+	/// </summary>
+	/// <param name="intensity">The intensity of the light (0-255)</param>
+
 	analogWrite(_Rpin, 0);
 	analogWrite(_Gpin, 0);
 	analogWrite(_Bpin, intensity);
@@ -157,8 +220,15 @@ void LEDstrip::SetBlueLight(int intensity)
 	BlueVal=random(intensity);
 }
 
-void LEDstrip::SetAdvRandomColour(int _R1, int _G1, int _B1, int Variation)
-{
+void LEDstrip::SetRGBRandomColour(byte _R1, byte _G1, byte _B1, byte Variation) {
+	/// <summary>
+	/// Generate a random RGB colour which only differs by a given amount from the previous colour.
+	/// </summary>
+	/// <param name="_R1">Initial Red value (0-255)</param>
+	/// <param name="_G1">Initial Green value (0-255)</param>
+	/// <param name="_B1">Initial Blue value (0-255)</param>
+	/// <param name="Variation">Max difference between current and next R, G and B values (0-255)</param>
+
 	//_R1, _G1 and _B1 are the current ( or start) values for the random colour
 
 	//The new random values are limited between an upper and lower value equal to + or - "Variation"
@@ -179,8 +249,11 @@ void LEDstrip::SetAdvRandomColour(int _R1, int _G1, int _B1, int Variation)
 
 }
 
-float LEDstrip::Hue_2_RGB(float v1,float v2,float vH)             //Function Hue_2_RGB
-{
+float LEDstrip::Hue_2_RGB(float v1,float v2,float vH) {
+	/// <summary>
+	/// Private function used by the conversion between HSL to RGB
+	/// </summary>
+	
 	if ( vH < 0 ) 
 	{
 		vH += 1;
@@ -210,20 +283,18 @@ float LEDstrip::Hue_2_RGB(float v1,float v2,float vH)             //Function Hue
 }
 
 
-/**
- * Converts an RGB color value to HSL. Conversion formula
- * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
- * Assumes r, g, and b are contained in the set [0, 255] and
- * returns h in the set [0,360].
- * returns s, and l in the set [0,100].
- *
- * @param   Number  r       The red color value
- * @param   Number  g       The green color value
- * @param   Number  b       The blue color value
- */
-void LEDstrip::RGB2HSL(int R, int G, int B) 
-{
-	//http://www.rapidtables.com/convert/color/rgb-to-hsl.htm
+void LEDstrip::RGB2HSL(byte R, byte G, byte B) {
+	/// <summary>
+	/// Converts an RGB color value to HSL. 
+	/// Conversion formula adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+	/// http://www.rapidtables.com/convert/color/rgb-to-hsl.htm
+	/// 
+	/// Returns HueVal (0-360), SaturationVal (0-100) and LightnessVal (0-100)
+	/// </summary>
+	/// <param name="R">Red value (0-255)</param>
+	/// <param name="G">Green value (0-255)</param>
+	/// <param name="B">Blue value (0-255)</param>
+	
 	
 	float _R = R;
 	float _G = G;
@@ -295,8 +366,15 @@ void LEDstrip::RGB2HSL(int R, int G, int B)
 	LightnessVal=L;
 }
 
-void LEDstrip::HSL2RGB(int _H, int _S, int _L) 
-{
+void LEDstrip::HSL2RGB(int _H, int _S, int _L) {
+	/// <summary>
+	/// Converts an HSL color value to RGB.
+	/// Returns RedVal, GreenVal and BlueVal (0-255)
+	/// </summary>
+	/// <param name="_H">Hue (0-360)</param>
+	/// <param name="_S">Saturation (0-100)</param>
+	/// <param name="_L">Lightness (0-100)</param>
+	
 	float H = _H;	// 0 >= H <= 360
 
 	float S = _S;

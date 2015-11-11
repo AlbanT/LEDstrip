@@ -4,11 +4,15 @@
 
 LEDstrip myLEDstrip;
 
+const int Rpin = 3;
+const int Gpin = 5;
+const int Bpin = 6;
+
 int i;
 
 void setup()
 {
-	myLEDstrip.DefineRGBLED(9,10,11);
+	myLEDstrip.DefineRGBLED(Rpin,Gpin,Bpin);
 
 	myLEDstrip.SetRedLight(255);
 	delay(1000); 
@@ -28,7 +32,7 @@ void loop()
 		myLEDstrip.SetAdvRandomColour(myLEDstrip.RedVal,myLEDstrip.GreenVal,myLEDstrip.BlueVal,10);
 		delay(500);
 	}
-	else if (i=21) {
+	else if (i==21) {
 		myLEDstrip.LEDstripOFF();
 		delay(250);
 		myLEDstrip.SetWhiteLight(255);
